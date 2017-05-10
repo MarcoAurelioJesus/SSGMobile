@@ -20,6 +20,7 @@ const logoSysmap = require("../imgs/logoSys.jpg");
 export default class TelaLogin extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
       user: "marco.jesus@sysmap.com.br",
       password: "MY@Yeshua",
