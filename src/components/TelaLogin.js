@@ -8,58 +8,74 @@ import {
   TouchableHighlight,
   TextInput,
   TouchableOpacity,
-  Image
+  Image,
+  ScrollView,
+  Switch
 } from "react-native";
 import axios from "axios";
 import { Actions } from "react-native-router-flux";
 import { Router, Scene } from "react-native-router-flux";
 import TopoSys from "./TopoSys";
 import PaginaPrincipal from "./PaginaPrincipal";
+import OnloadTexte from "./OnloadTexte";
 const logoSysmap = require("../imgs/logoSys.jpg");
-
+const onload = require("../imgs/load.gif");
+//rx js
 export default class TelaLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "marco.jesus@sysmap.com.br",
-      password: "MY@Yeshua",
-      Dados: []
+      user: "marco.jesus",
+      password: "Sysmap@Yeshua",
+      token: "",
+      trueSwitchIsOn: true,
+      falseSwitchIsOn: false
     };
   }
 
   logar() {
     if (
       this.state.user != null &&
-      this.state.password != null
+      this.state.password != null &&
+      (this.state.user != "" && this.state.password != "")
     ) {
+      var urlLogin =
+        "https://ssg.sysmap.com.br/api/session/log-in?data={UserName:" +
+        '"' +
+        this.state.user +
+        '"' +
+        ",Password:" +
+        '"' +
+        this.state.password +
+        '"' +
+        ",IsPersistent:false}";
       {
-        var urlLogin =
-          "https://" +
-          "ssghml.sysmap.com.br/api/session/log‐in?data={UserName:" +
-          this.state.user.toString() +
-          ",Password:" +
-          this.state.password.toString() +
-          ",IsPersistent:0}";
-        console.log(urlLogin);
+        this.autentic(urlLogin);
       }
-      axios
-        .get(urlLogin)
-        .then(response => {
-          this.setState({ Dados: response });
-        })
-        .catch(() => {
-          alert("Erro ao buscar dados");
-        });
-      console.log(this.state.Dados);
-      Actions.paginaPrincipal();
     } else {
-      alert("Senha ou usuario invalido!");
+      alert("Erro Login");
     }
+  }
+  autentic(urlLogin) {
+    axios
+      .get(urlLogin)
+      .then(response => {
+        this.setState({ token: response.data.ReturnObject.UserToken });
+        if (this.state.token != null && this.state.token != "") {
+          Actions.paginaPrincipal({ token: this.state.token });
+        }
+      })
+      .catch(() => {
+        alert("Erro ao Logar");
+      });
   }
 
   render() {
     return (
       <View>
+        <View>
+          <Text />
+        </View>
         <StatusBar backgroundColor="#5e7796" />
         <View style={styles.viewLogar}>
           <Image style={{ margin: 5 }} source={logoSysmap} />
@@ -75,32 +91,41 @@ export default class TelaLogin extends Component {
             </Text>
           </View>
           <View style={styles.viewTextInput}>
+
             <TextInput
               style={styles.texInputStyles}
               onChangeText={user => this.setState({ user })}
               value={this.state.user}
+              clearTextOnFocus={true}
               placeholder={"User"}
               underlineColorAndroid={"#FFFFE0"}
-              secureTextEnt="true"
             />
           </View>
           <View style={styles.viewTextInput}>
-
             <TextInput
+              selectionColor="#63B8FF"
               title="Password"
               style={styles.texInputStyles}
               onChangeText={password => this.setState({ password })}
               value={this.state.password}
               placeholder={"Password"}
+              secureTextEntry={!this.state.eventSwitchIsOn}
               underlineColorAndroid={"#FFFFE0"}
-              secureTextEntry
+            />
+          </View>
+          <View style={{marginLeft:12 }}>
+            <Text  style={{ color: "#696969"}}>
+              {this.state.eventSwitchIsOn ? "Senha exposta!" : "Exibir Senha?"}
+            </Text>
+            <Switch style={{marginTop:-20 }}
+            thumbTintColor={'#63B8FF'}
+            tintColor={'#b0c4de'}
+              onValueChange={value => this.setState({ eventSwitchIsOn: value })}
+              value={this.state.eventSwitchIsOn}
             />
           </View>
           <View style={styles.btnLogar}>
-            <TouchableOpacity
-            
-             onPress={() => this.logar()}
-            >
+            <TouchableOpacity onPress={() => this.logar()}>
               <Text
                 style={{
                   color: "#FFF",
@@ -110,6 +135,24 @@ export default class TelaLogin extends Component {
                 }}
               >
                 Entrar
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.btnLogar}>
+            <TouchableOpacity
+              onPress={() => {
+                Actions.paginaPrincipal();
+              }}
+            >
+              <Text
+                style={{
+                  color: "#FFF",
+                  fontWeight: "bold",
+                  padding: 10,
+                  fontSize: 16
+                }}
+              >
+                Login
               </Text>
             </TouchableOpacity>
           </View>

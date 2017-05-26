@@ -1,4 +1,14 @@
 {
   "name": "SSGMobile",
-  "displayName": "SSGMobile"
+  "displayName": "SSGMobile",
+  "version": "1.0",
+  "description": "SSG Sysmap",
+  "main": "src/index.js",
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+    "author": "Marco Aurélio de Jesus",
+    "email": "marco.jesus@sysmap.com.br"
+    
 }

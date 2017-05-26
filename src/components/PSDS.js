@@ -13,7 +13,7 @@ export default class PSDS extends Component {
     return (
      <View style={{backgroundColor:'#FFF'}}>   
        <View>
-          <StatusBar backgroundColor='#5e7796' />
+          <StatusBar backgroundColor="#DDD" />
           <TopoSys />
         </View>
         <Text style={{margin:20, fontSize:16, lineHeight:30}}>
