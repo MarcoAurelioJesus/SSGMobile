@@ -25,8 +25,8 @@ export default class TelaLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: "marco.jesus",
-      password: "Sysmap@Yeshua",
+      user: "",
+      password: "",
       token: "",
       trueSwitchIsOn: true,
       falseSwitchIsOn: false
